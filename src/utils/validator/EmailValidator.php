@@ -18,11 +18,29 @@ class EmailValidator
         }
     }
 
-    public function validate()
+    /**
+     * @throws EmailValidatorException
+     */
+    public function validateAddress()
     {
+        if (
+            (empty($this->pattern) && filter_var($this->address, FILTER_VALIDATE_EMAIL) === false) OR
+            (preg_match($this->pattern, $this->address) === false)
+        ) {
+            throw new EmailValidatorException($this->address);
+        }
     }
 
+    /**
+     * @throws EmailValidatorException
+     */
     public function validateMX()
     {
+        if (substr_count($this->address, "@") === 1) {
+            $pos = strpos($this->address, "@");
+            $domainName = substr($this->address, $pos);
+            if (getmxrr($domainName, $mxRecords)) return;
+        }
+        throw new EmailValidatorException($this->address);
     }
 }
