@@ -38,7 +38,7 @@ class EmailValidator
     {
         if (substr_count($this->address, "@") === 1) {
             $pos = strpos($this->address, "@");
-            $domainName = substr($this->address, $pos);
+            $domainName = substr($this->address, $pos + 1);
             if (getmxrr($domainName, $mxRecords)) return;
         }
         throw new EmailValidatorException($this->address);
