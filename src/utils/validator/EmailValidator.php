@@ -24,8 +24,8 @@ class EmailValidator
     public function validateAddress()
     {
         if (
-            (empty($this->pattern) && filter_var($this->address, FILTER_VALIDATE_EMAIL) === false) OR
-            (preg_match($this->pattern, $this->address) === false)
+            (!empty($this->pattern) && preg_match($this->pattern, $this->address) === false) OR
+            (filter_var($this->address, FILTER_VALIDATE_EMAIL) === false)
         ) {
             throw new EmailValidatorException($this->address);
         }
